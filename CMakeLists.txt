@@ -106,17 +106,24 @@ set(MO_SRC
     src/MicroOcpp_c.cpp
 )
 
+set(MO_DIR 
+    src
+    src/MicroOcpp
+    src/MicroOcpp/Model
+)
+
 if(ESP_PLATFORM)
-
     idf_component_register(SRCS ${MO_SRC}
-        INCLUDE_DIRS "./src" "../ArduinoJson/src"
+        INCLUDE_DIRS ${MO_DIR}
         PRIV_REQUIRES spiffs
+        REQUIRES bblanchon__arduinojson
     )
 
-    target_compile_options(${COMPONENT_TARGET} PUBLIC
+    target_compile_definitions(${COMPONENT_TARGET} PUBLIC
         -DMO_PLATFORM=MO_PLATFORM_ESPIDF
+        -DMO_FILENAME_PREFIX="/mo_store/"
+        -DMO_TRAFFIC_OUT
     )
-
     return()
 endif()
 
